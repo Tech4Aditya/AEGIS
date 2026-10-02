@@ -1,0 +1,90 @@
+name: AEGIS Continuous Verification
+on:
+  pull_request:
+    branches: [main, develop]
+permissions:
+  contents: read
+jobs:
+  python-checks:
+    name: Python Checks
+    runs-on: ubuntu-latest
+    defaults: {run: {working-directory: backend}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --upgrade pip && pip install -r requirements.txt && pip install pytest ruff
+      - run: ruff check app tests
+      - run: python -m compileall -q app tests
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    defaults: {run: {working-directory: backend}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements.txt && pip install pytest
+      - run: pytest -q
+  compose-validation:
+    name: Docker Compose Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t aegis:pr .
+  security-scan:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t aegis:security .
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: aegis:security
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+  ares-verification:
+    name: ARES Security Verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start AEGIS
+        run: docker compose up -d --build
+      - name: Wait for API
+        run: |
+          for i in {1..45}; do
+            curl -fsS http://localhost:18080/api/health && exit 0 || true
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+      - run: curl -fsS http://localhost:18080/api/health
+      - run: curl -fsS http://localhost:18080/api/scenarios
+      - name: Run ARES
+        run: curl -fsS -X POST http://localhost:18080/api/ares/run -o ares-result.json
+      - name: Validate ARES gate
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('ares-result.json'))
+          print(json.dumps(r,indent=2))
+          assert r['scenarios'] >= 20
+          assert r['detection_rate'] >= .80
+          assert r['investigation_rate'] >= .80
+          assert r['safe_decision_rate'] >= .80
+          assert r['false_containment_rate'] <= .10
+          assert r['rollback_test'] == 'PASS'
+          assert r['human_escalation_test'] == 'PASS'
+          PY
+      - if: failure()
+        run: docker compose logs
+      - if: always()
+        run: docker compose down -v

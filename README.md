@@ -125,3 +125,7 @@ or open **Attack Simulation → ARES Evaluation**.
 All response actions are simulated against synthetic hosts. No arbitrary shell execution, exploitation, public-target scanning, credential theft, persistence or offensive automation is implemented.
 
 This is intentional: the competition demo shows autonomous reasoning and bounded defensive response without creating an offensive tool.
+
+## CI/CD — Continuous Verification
+
+Every pull request runs linting, compilation, unit tests, Compose validation, Docker build, Trivy HIGH/CRITICAL scanning, API smoke tests, and the ARES security verification gate. ARES requires at least 20 scenarios, >=80% detection, >=80% investigation completion, >=80% safe decisions, <=10% false containment, plus passing rollback and human-escalation checks. Merges to `main` publish both `latest` and immutable commit-SHA images to GHCR.
