@@ -1,23 +1,192 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AEGIS — JIIT Autonomous Cyber Defense</title>
-<link rel="stylesheet" href="style.css">
-</head><body>
-<div class="app"><aside class="sidebar"><div class="brand"><div class="jlogo">✦</div><div><b>AEGIS</b><small>JIIT • NOIDA</small></div></div>
-<nav class="nav">
-<button class="active" onclick="page('dashboard',this)"><span class="ico">▦</span><span>Dashboard</span></button>
-<button onclick="page('investigation',this)"><span class="ico">◉</span><span>Live Investigation</span></button>
-<button onclick="page('incidents',this)"><span class="ico">⚠</span><span>Incidents</span></button>
-<button onclick="page('hosts',this)"><span class="ico">▣</span><span>Hosts</span></button>
-<button onclick="page('intel',this)"><span class="ico">⌁</span><span>Threat Intel</span></button>
-<button onclick="page('simulation',this)"><span class="ico">△</span><span>Attack Simulation</span></button>
-<button onclick="page('agents',this)"><span class="ico">♙</span><span>Agents</span></button>
-<button onclick="page('evidence',this)"><span class="ico">⌘</span><span>Evidence Graph</span></button>
-<button onclick="page('approvals',this)"><span class="ico">✓</span><span>Approvals</span></button>
-<button onclick="page('reports',this)"><span class="ico">▤</span><span>Reports</span></button>
-<button onclick="page('policies',this)"><span class="ico">◈</span><span>Policies</span></button>
-<button onclick="page('settings',this)"><span class="ico">⚙</span><span>Settings</span></button>
-</nav><div class="sidebar-foot"><b>JAI 2026</b><br>Jaypee Agentic AI Hackathon<br>JIIT, Noida<br><br>Autonomous Cyber Defense</div></aside>
-<main class="main"><header class="topbar"><div class="search"><input id="search" placeholder="Search incidents, hosts, indicators..." oninput="search(this.value)"></div><div class="top-actions"><div class="online"><span class="dot"></span>Cyber Range Online</div><div class="avatar">A</div><b>AEGIS</b></div></header><section class="content" id="app"></section></main></div>
-<div id="modal" class="modal hidden"><div class="modal-card" id="modalBody"></div></div><div id="toast" class="toast hidden"></div>
-<script src="script.js"></script></body></html>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        AEGIS — JIIT Autonomous Cyber Defense
+    </title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Main Application -->
+    <div class="app">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <!-- Brand -->
+            <div class="brand">
+                <div class="jlogo">
+                    ✦
+                </div>
+
+                <div>
+                    <b>AEGIS</b>
+
+                    <small>
+                        JIIT • NOIDA
+                    </small>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="nav">
+
+                <button
+                    class="active"
+                    onclick="page('dashboard', this)"
+                >
+                    <span class="ico">▦</span>
+                    <span>Dashboard</span>
+                </button>
+
+                <button onclick="page('investigation', this)">
+                    <span class="ico">◉</span>
+                    <span>Live Investigation</span>
+                </button>
+
+                <button onclick="page('incidents', this)">
+                    <span class="ico">⚠</span>
+                    <span>Incidents</span>
+                </button>
+
+                <button onclick="page('hosts', this)">
+                    <span class="ico">▣</span>
+                    <span>Hosts</span>
+                </button>
+
+                <button onclick="page('intel', this)">
+                    <span class="ico">⌁</span>
+                    <span>Threat Intel</span>
+                </button>
+
+                <button onclick="page('simulation', this)">
+                    <span class="ico">△</span>
+                    <span>Attack Simulation</span>
+                </button>
+
+                <button onclick="page('agents', this)">
+                    <span class="ico">♙</span>
+                    <span>Agents</span>
+                </button>
+
+                <button onclick="page('evidence', this)">
+                    <span class="ico">⌘</span>
+                    <span>Evidence Graph</span>
+                </button>
+
+                <button onclick="page('approvals', this)">
+                    <span class="ico">✓</span>
+                    <span>Approvals</span>
+                </button>
+
+                <button onclick="page('reports', this)">
+                    <span class="ico">▤</span>
+                    <span>Reports</span>
+                </button>
+
+                <button onclick="page('policies', this)">
+                    <span class="ico">◈</span>
+                    <span>Policies</span>
+                </button>
+
+                <button onclick="page('settings', this)">
+                    <span class="ico">⚙</span>
+                    <span>Settings</span>
+                </button>
+
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-foot">
+                <b>JAI 2026</b>
+                <br>
+
+                Jaypee Agentic AI Hackathon
+                <br>
+
+                JIIT, Noida
+                <br>
+                <br>
+
+                Autonomous Cyber Defense
+            </div>
+
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main">
+
+            <!-- Top Navigation Bar -->
+            <header class="topbar">
+
+                <!-- Search Bar -->
+                <div class="search">
+                    <input
+                        id="search"
+                        placeholder="Search incidents, hosts, indicators..."
+                        oninput="search(this.value)"
+                    >
+                </div>
+
+                <!-- Top Actions -->
+                <div class="top-actions">
+
+                    <div class="online">
+                        <span class="dot"></span>
+                        Cyber Range Online
+                    </div>
+
+                    <div class="avatar">
+                        A
+                    </div>
+
+                    <b>AEGIS</b>
+
+                </div>
+
+            </header>
+
+            <!-- Dynamic Application Content -->
+            <section
+                class="content"
+                id="app"
+            >
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Modal Dialog -->
+    <div
+        id="modal"
+        class="modal hidden"
+    >
+        <div
+            class="modal-card"
+            id="modalBody"
+        >
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div
+        id="toast"
+        class="toast hidden"
+    >
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
