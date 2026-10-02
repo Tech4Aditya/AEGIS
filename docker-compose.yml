@@ -1,0 +1,54 @@
+services:
+  aegis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aegis
+    ports:
+      - "18080:8000"
+    environment:
+      AEGIS_MODE: product
+      DATABASE_URL: postgresql://aegis:aegis@postgres:5432/aegis
+      REDIS_URL: redis://redis:6379/0
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+      PYTHONUNBUFFERED: "1"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./policies:/app/policies
+      - ./scenarios:/app/scenarios
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: aegis_postgres
+    environment:
+      POSTGRES_DB: aegis
+      POSTGRES_USER: aegis
+      POSTGRES_PASSWORD: aegis
+    ports:
+      - "55432:5432"
+    volumes:
+      - aegis_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aegis -d aegis"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: aegis_redis
+    ports:
+      - "56379:6379"
+    volumes:
+      - aegis_redis:/data
+
+volumes:
+  aegis_pg:
+  aegis_redis:

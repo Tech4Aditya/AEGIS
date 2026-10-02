@@ -1,0 +1,9 @@
+{
+  "automatic": {
+    "ISOLATE_HOST": {"minimum_confidence": 0.85, "minimum_severity": "HIGH", "reversible": true},
+    "REVOKE_SESSION": {"minimum_confidence": 0.75, "reversible": true},
+    "QUARANTINE_FILE": {"minimum_confidence": 0.75, "reversible": true}
+  },
+  "human_approval": ["DISABLE_USER"],
+  "principle": "The model recommends; deterministic policy authorizes."
+}
